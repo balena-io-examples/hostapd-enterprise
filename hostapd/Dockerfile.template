@@ -1,0 +1,25 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-debian:buster
+
+RUN apt-get update \
+	&& apt-get install -y \
+		hostapd \
+		network-manager \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+	&& systemctl mask NetworkManager.service
+
+ENV DBUS_SYSTEM_BUS_ADDRESS unix:path=/host/run/dbus/system_bus_socket
+
+ENV INITSYSTEM on
+
+WORKDIR /usr/src/app
+
+COPY hostapd.conf /etc/hostapd/hostapd.conf
+COPY hostapd.eap_user /etc/hostapd/hostapd.eap_user
+COPY hostapd.ca.pem /etc/hostapd/hostapd.ca.pem
+COPY hostapd.cert.pem /etc/hostapd/hostapd.cert.pem
+COPY hostapd.dh.pem /etc/hostapd/hostapd.dh.pem
+
+COPY start.sh .
+
+CMD ["bash", "start.sh"]

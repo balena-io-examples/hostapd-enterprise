@@ -1,0 +1,16 @@
+# Based on the example from
+# http://rpc.one.pl/pliki/openwrt/backfire/10.03.x/atheros/hostapd/dokumentacja/hostapd.eap_user
+
+# Outer (phase 1) identities
+# Wildcard for all other identities
+"peap"  PEAP
+"ttls"          TTLS
+*               PEAP,TTLS,TLS,SIM,AKA
+
+# Phase 2 (tunnelled within EAP-PEAP or EAP-TTLS) users
+"md5"           MD5     "p"     [2]
+"chap"  MSCHAPV2        "p"     [2]
+#"t-gtc"                GTC     "p"     [2]
+"peap"  MSCHAPV2        "p"     [2]
+"user"          MD5,GTC,MSCHAPV2        "p"     [2]
+"ttls"  TTLS-PAP,TTLS-CHAP,TTLS-MSCHAP,TTLS-MSCHAPV2    "p"     [2]

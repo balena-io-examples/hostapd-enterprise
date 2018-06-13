@@ -1,0 +1,22 @@
+version: '2'
+services:
+  dnsmasq:
+    build: ./dnsmasq
+    network_mode: "host"
+    privileged: true
+    labels:
+      io.resin.features.dbus: '1'
+  hostapd:
+    build: ./hostapd
+    network_mode: "host"
+    privileged: true
+    labels:
+      io.resin.features.dbus: '1'
+    depends_on:
+      - dnsmasq
+  web-app:
+    build: ./web-app
+    network_mode: "host"
+    depends_on:
+      - hostapd
+      - dnsmasq
